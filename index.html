@@ -230,7 +230,6 @@
             line-height: 1.3;
         }
 
-        /* 说明条款 */
         .instructions-block {
             font-size: 8pt;
             line-height: 1.35;
@@ -499,10 +498,15 @@
     function generateRandomNumbers() {
         const rand7 = Math.floor(1000000 + Math.random() * 9000000);
         const rand6 = Math.floor(100000 + Math.random() * 900000);
+        
+        // 随机生成后三位的 0-9 数字
+        const r1 = Math.floor(Math.random() * 10);
+        const r2 = Math.floor(Math.random() * 10);
+        const r3 = Math.floor(Math.random() * 10);
 
         const chargeNo = `3-21-1-0${rand7.toString().padStart(6, '0')}-8`;
         const shroffNo = `32110${rand7.toString().padStart(6, '0')}8`;
-        const instrumentRef = `3-21-${rand6}-0-0-0`;
+        const instrumentRef = `3-21-${rand6}-${r1}-${r2}-${r3}`;
         const barcodeVal = `83050206000000001000015${shroffNo}30`;
 
         document.getElementById('display-charge-no').innerText = chargeNo;
