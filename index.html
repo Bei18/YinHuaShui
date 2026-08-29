@@ -2,7 +2,7 @@
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
-    <title>香港特別行政區稅務局印花稅署 - 繳付印花稅通知書</title>
+    <title>印花税</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <style>
@@ -67,9 +67,10 @@
             background: rgba(254, 242, 242, 0.95);
         }
 
+        /* 修改输入框容器宽度为 100px */
         .form-group {
             flex: 0 0 auto;
-            width: 140px;
+            width: 100px;
         }
 
         .form-group input {
@@ -295,18 +296,18 @@
 </head>
 <body>
 
-<!-- 控制面板 -->
+<!-- 控制面板：三个输入框宽度均设置为 100px -->
 <div class="control-panel" id="action-control-panel">
-    <div class="form-group">
+    <div class="form-group" style="width: 100px;">
         <input type="text" id="input-name-zh" value="" placeholder="纳税人中文名">
     </div>
 
-    <div class="form-group">
+    <div class="form-group" style="width: 100px;">
        <input type="text" id="input-name-en" value="" placeholder="纳税人英文名">
     </div>
 
-    <div class="form-group" style="width: 160px;">
-        <input type="number" id="input-amount-cny" value="" step="0.01" placeholder="人民币金额 (CNY)">
+    <div class="form-group" style="width: 100px;">
+        <input type="number" id="input-amount-cny" value="" step="0.01" placeholder="RMB金额">
     </div>
 
     <button class="action-btn" id="btn-copy" onclick="copyReceiptAsImage()">生成并复制图片</button>
@@ -321,7 +322,6 @@
                 <tr>
                     <td class="header-left">
                         <div class="ird-logo-container">
-                            <!-- 已更新为同目录相对路径，并增加 crossOrigin 跨域属性 -->
                             <img class="ird-logo-img" src="Inland_Revenue_Department_logo.png" crossorigin="anonymous" alt="IRD Logo">
                             <div>
                                 稅務局 印花稅署<br>
@@ -374,7 +374,7 @@
                 </tr>
             </table>
 
-            <!-- 主表结构 -->
+            <!-- 主表结构：将业务描述和纳税人区域修改为“纳税人”与“地址” -->
             <table class="main-details-table">
                 <tr>
                     <td style="width: 35%;">文書編號 Instrument Ref. No.:</td>
@@ -389,8 +389,8 @@
                 </tr>
                 <tr>
                     <td>
-                        業務/合約描述 Description of Agreement:<br>
-                        納稅人 Taxpayer Name:
+                        納稅人 Taxpayer Name:<br>
+                        地址 Address:
                     </td>
                     <td>
                         <div id="display-taxpayer-name" contenteditable="true" style="font-weight: bold; min-height: 1.2em;"></div>
@@ -498,7 +498,6 @@
                     </div>
                     <div class="fps-qr-box">
                         <div style="font-size: 7pt; font-weight: bold;">"FPS" Payment</div>
-                        <!-- 这里的 QR Server API 外部链接已加上跨域支持控制 -->
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=321108533448" crossorigin="anonymous" alt="FPS QR">
                         <div style="font-size: 7pt;">「轉數快」繳費</div>
                     </div>
@@ -603,8 +602,8 @@
             const canvas = await html2canvas(targetElement, {
                 scale: 3, 
                 dpi: 300,
-                allowTaint: false, // 设置为 false 确保安全策略严格校验
-                useCORS: true,     // 允许加载跨域资源
+                allowTaint: false,
+                useCORS: true,
                 backgroundColor: "#ffffff"
             });
 
