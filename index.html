@@ -605,18 +605,18 @@
 
                         setTimeout(() => {
                             copyBtn.classList.remove('copied');
-                            copyBtn.innerText = "生成并复制图片";
+                            copyBtn.innerText = "复制图片";
                             copyBtn.disabled = false;
                         }, 3000);
                     } catch (err) {
                         console.error(err);
                         showToast("复制失败，请确认页面已通过 HTTP/HTTPS 环境打开且已授予剪贴板权限", "error");
-                        copyBtn.innerText = "生成并复制图片";
+                        copyBtn.innerText = "复制图片";
                         copyBtn.disabled = false;
                     }
                 } else {
                     showToast("当前浏览器环境不支持图片写入剪贴板", "error");
-                    copyBtn.innerText = "生成并复制图片";
+                    copyBtn.innerText = "复制图片";
                     copyBtn.disabled = false;
                 }
             }, "image/png");
@@ -624,7 +624,7 @@
         } catch (err) {
             console.error(err);
             showToast("渲染失败，请检查资源路径或 CORS 跨域设置", "error");
-            copyBtn.innerText = "生成并复制图片";
+            copyBtn.innerText = "复制图片";
             copyBtn.disabled = false;
         }
     }
