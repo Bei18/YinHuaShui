@@ -20,8 +20,7 @@
             flex-direction: column;
             align-items: center;
         }
-
-        /* 可编辑文本样式 */
+        
         [contenteditable="true"]:hover {
             background-color: #f0fdf4;
             outline: 1px dashed #005a36;
@@ -31,7 +30,6 @@
             outline: 2px solid #005a36;
         }
 
-        /* 控制面板 */
         .control-panel {
             position: fixed;
             top: 20px;
@@ -67,7 +65,6 @@
             background: rgba(254, 242, 242, 0.95);
         }
 
-        /* 修改输入框容器宽度为 100px */
         .form-group {
             flex: 0 0 auto;
             width: 100px;
@@ -116,7 +113,6 @@
             box-shadow: 0 0 12px rgba(22, 163, 74, 0.6);
         }
 
-        /* A4 页面标准 */
         .receipt-container {
             width: 210mm;
             min-width: 210mm;
@@ -143,7 +139,6 @@
             justify-content: space-between;
         }
 
-        /* Header */
         .header-table {
             width: 100%;
             border-collapse: collapse;
@@ -175,7 +170,6 @@
             flex-shrink: 0;
         }
 
-        /* 主标题 */
         .title-block {
             text-align: center;
             margin: 10px 0 15px 0;
@@ -192,7 +186,6 @@
             margin-top: 2px;
         }
 
-        /* 顶部数据 */
         .meta-top-table {
             width: 100%;
             border-collapse: collapse;
@@ -212,7 +205,6 @@
             font-size: 11pt;
         }
 
-        /* 主表格 */
         .main-details-table {
             width: 100%;
             border-collapse: collapse;
@@ -230,7 +222,6 @@
             font-weight: bold;
         }
 
-        /* 签名落款 */
         .collector-signature {
             text-align: right;
             margin-top: 10px;
@@ -248,7 +239,6 @@
             font-size: 8.5pt;
         }
 
-        /* 底部付款区 */
         .footer-payment-section {
             width: 100%;
             border-top: 1px dashed #666;
@@ -272,7 +262,6 @@
             margin: 0 auto;
         }
 
-        /* Toast 提示 */
         .custom-toast {
             position: fixed;
             top: -80px;
@@ -296,7 +285,6 @@
 </head>
 <body>
 
-<!-- 控制面板：三个输入框宽度均设置为 100px -->
 <div class="control-panel" id="action-control-panel">
     <div class="form-group" style="width: 100px;">
         <input type="text" id="input-name-zh" value="" placeholder="纳税人中文名">
@@ -313,7 +301,6 @@
     <button class="action-btn" id="btn-copy" onclick="copyReceiptAsImage()">生成并复制图片</button>
 </div>
 
-<!-- A4 主体页面 -->
 <div class="receipt-container" id="receipt-capture-area">
     <div class="receipt-inner">
         <div>
@@ -342,13 +329,11 @@
                 </tr>
             </table>
 
-            <!-- 标题 Block -->
             <div class="title-block">
                 <div class="line-1">印花稅 STAMP DUTY</div>
                 <div class="line-2">繳付印花稅通知書 STAMP DUTY PAYMENT NOTICE</div>
             </div>
-
-            <!-- 签发日期与税单号码 -->
+            
             <table class="meta-top-table">
                 <tr>
                     <td style="width: 50%;">
@@ -374,7 +359,6 @@
                 </tr>
             </table>
 
-            <!-- 主表结构：将业务描述和纳税人区域修改为“纳税人”与“地址” -->
             <table class="main-details-table">
                 <tr>
                     <td style="width: 35%;">文書編號 Instrument Ref. No.:</td>
@@ -450,14 +434,12 @@
                 </tr>
             </table>
 
-            <!-- 署名落款 -->
             <div class="collector-signature">
                 印花稅署署長 譚大鵬<br>
                 <strong>TAM Tai-pang</strong><br>
                 Collector of Stamp Revenue
             </div>
 
-            <!-- 条款说明 -->
             <div class="instructions-block">
                 <strong>有關繳款辦法詳情，請瀏覽本局網頁 For details of payment instructions, please visit our web site:</strong><br>
                 &lt; www.ird.gov.hk &gt;<br>
@@ -469,7 +451,6 @@
             </div>
         </div>
 
-        <!-- 底部条码及回执区 -->
         <div>
             <div style="font-size: 8pt; margin-bottom: 5px;">
                 I.R.C.表格第 3512 號<br>
