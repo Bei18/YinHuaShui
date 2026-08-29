@@ -1,671 +1,1205 @@
 <!DOCTYPE html>
+
 <html lang="zh-HK">
+
 <head>
+
     <meta charset="UTF-8">
-    <title>印花税</title>
+
+    <title>印花稅-完税</title>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
     <style>
+
         *, *::before, *::after {
+
             box-sizing: border-box;
+
         }
+
         body {
+
             margin: 0;
+
             padding: 100px 0 30px;
+
             font-family: "MingLiU", "PMingLiU", "Times New Roman", serif;
+
             color: #000;
+
             background: linear-gradient(135deg, #eef2f3 0%, #8e9eab 100%);
+
             min-height: 100vh;
+
             display: flex;
+
             flex-direction: column;
+
             align-items: center;
+
         }
+
+
 
         [contenteditable="true"]:hover {
+
             background-color: #f0fdf4;
+
             outline: 1px dashed #005a36;
+
         }
+
         [contenteditable="true"]:focus {
+
             background-color: #fff;
+
             outline: 2px solid #005a36;
+
         }
+
+        
 
         .control-panel {
+
             position: fixed;
+
             top: 20px;
+
             left: 50%;
+
             transform: translateX(-50%);
+
             width: auto;
+
             max-width: 95vw;
+
             background: rgba(255, 255, 255, 0.95);
+
             -webkit-backdrop-filter: blur(12px);
+
             backdrop-filter: blur(12px);
+
             border: 1px solid rgba(0, 0, 0, 0.15);
+
             border-radius: 8px;
+
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
             padding: 10px 15px;
+
             z-index: 9999;
+
             display: flex;
+
             flex-wrap: nowrap;
+
             justify-content: flex-start;
+
             align-items: center;
+
             gap: 12px;
+
             overflow-x: auto;
+
             white-space: nowrap;
+
         }
+
+
 
         @keyframes shake {
+
             0%, 100% { transform: translateX(-50%); }
+
             20%, 60% { transform: translateX(-52%); }
+
             40%, 80% { transform: translateX(-48%); }
+
         }
+
         .control-panel.shake {
+
             animation: shake 0.4s ease-in-out;
+
             border-color: #dc2626;
+
             background: rgba(254, 242, 242, 0.95);
+
         }
+
+
 
         .form-group {
+
             flex: 0 0 auto;
+
             width: 100px;
+
         }
+
+
 
         .form-group input {
+
             width: 100%;
+
             height: 34px;
+
             border: 1px solid #ccc;
+
             background: #fff;
+
             border-radius: 4px;
+
             padding: 4px 8px;
+
             font-size: 9.5pt;
+
             text-align: center;
+
             font-family: sans-serif;
+
         }
+
         .form-group input:focus {
+
             outline: none;
+
             border-color: #005a36;
+
             box-shadow: 0 0 0 2px rgba(0, 90, 54, 0.2);
+
         }
 
-        .action-btn {
+        
+
+        .copy-btn {
+
             height: 34px;
-            padding: 0 16px;
-            background-color: #005a36;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 9.5pt;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 6px rgba(0, 90, 54, 0.3);
-            flex-shrink: 0;
-            font-family: sans-serif;
-        }
-        .action-btn:hover { background-color: #004026; }
 
-        .action-btn.copied { 
-            background-color: #16a34a !important; 
-            color: #ffffff !important;
-            box-shadow: 0 0 12px rgba(22, 163, 74, 0.6);
+            padding: 0 18px;
+
+            background-color: #005a36;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 4px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            font-size: 9.5pt;
+
+            transition: all 0.2s ease;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            box-shadow: 0 2px 6px rgba(0, 90, 54, 0.3);
+
+            flex-shrink: 0;
+
+            font-family: sans-serif;
+
         }
+
+        .copy-btn:hover {
+
+            background-color: #004026;
+
+        }
+
+        .copy-btn.copied {
+
+            background-color: #16a34a !important;
+
+        }
+
+
 
         .receipt-container {
+
             width: 210mm;
+
             min-width: 210mm;
+
             max-width: 210mm;
+
             height: 297mm;
+
             min-height: 297mm;
+
             max-height: 297mm;
+
             background-color: #ffffff;
+
             border: 1px solid #ccc;
-            padding: 12mm 15mm 10mm 15mm;
+
+            padding: 16mm 20mm 15mm 20mm;
+
             position: relative;
+
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+
             margin: 0 auto;
+
             overflow: hidden;
+
             box-sizing: border-box;
-            font-size: 9.5pt;
-            line-height: 1.35;
+
+            font-size: 10.5pt;
+
+            line-height: 1.5;
+
         }
+
+
 
         .receipt-inner {
+
             height: 100%;
+
             display: flex;
+
             flex-direction: column;
+
             justify-content: space-between;
+
         }
+
+
 
         .header-table {
+
             width: 100%;
+
             border-collapse: collapse;
-            margin-bottom: 5px;
+
+            margin-bottom: 10px;
+
         }
+
         .header-left {
-            width: 50%;
+
+            width: 55%;
+
             vertical-align: top;
-            font-size: 8pt;
+
         }
+
         .header-right {
-            width: 50%;
+
+            width: 45%;
+
             vertical-align: top;
+
             text-align: right;
-            font-size: 8pt;
-            font-family: "Times New Roman", serif;
+
+            font-size: 8.5pt;
+
+            font-family: Arial, sans-serif;
+
+            line-height: 1.3;
+
         }
+
+
 
         .ird-logo-container {
+
             display: flex;
-            align-items: flex-start;
+
+            align-items: center;
+
         }
-        
+
         .ird-logo-img {
+
             width: 42px;
+
             height: 42px;
+
             object-fit: contain;
-            margin-right: 10px;
+
+            margin-right: 12px;
+
             flex-shrink: 0;
+
         }
 
-        .title-block {
-            text-align: center;
-            margin: 10px 0 15px 0;
-        }
-        .title-block .line-1 {
-            font-size: 16pt;
+        .header-title-zh {
+
+            font-size: 15pt;
+
             font-weight: bold;
-            letter-spacing: 2px;
-        }
-        .title-block .line-2 {
-            font-size: 14pt;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-top: 2px;
+
+            letter-spacing: 3px;
+
         }
 
-        .meta-top-table {
+        .header-title-en {
+
+            font-size: 10.5pt;
+
+            font-weight: bold;
+
+            font-family: "Times New Roman", serif;
+
+        }
+
+
+
+        .meta-table {
+
             width: 100%;
+
             border-collapse: collapse;
-            margin-bottom: 10px;
-        }
-        .meta-top-table td {
-            vertical-align: top;
-            font-size: 9.5pt;
+
+            margin-top: 15px;
+
+            margin-bottom: 20px;
+
+            border-top: 1px solid #000;
+
+            border-bottom: 1px solid #000;
+
+            padding: 8px 0;
+
         }
 
-        .shroff-box {
-            border: 1px solid #000;
-            padding: 6px 12px;
-            text-align: center;
+        .meta-table td {
+
+            padding: 4px 0;
+
+            font-size: 9.5pt;
+
+            vertical-align: top;
+
+        }
+
+        .meta-label-red {
+
+            color: #cc0000;
+
+            font-weight: normal;
+
+        }
+
+        .meta-value {
+
             font-family: "Courier New", monospace;
+
             font-weight: bold;
+
             font-size: 11pt;
+
+            padding: 0 2px;
+
         }
 
-        .main-details-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid #000;
-            margin-bottom: 12px;
-        }
-        .main-details-table td {
-            border: 1px solid #000;
-            padding: 5px 8px;
-            vertical-align: top;
-            font-size: 9pt;
-        }
-        .mono-val {
-            font-family: "Courier New", monospace;
-            font-weight: bold;
-        }
 
-        .collector-signature {
-            text-align: right;
-            margin-top: 10px;
-            margin-bottom: 15px;
-            font-size: 9.5pt;
-            line-height: 1.3;
-        }
 
-        .instructions-block {
-            font-size: 8pt;
-            line-height: 1.35;
-        }
-        .instructions-block strong {
-            font-size: 8.5pt;
-        }
+        .doc-title {
 
-        .footer-payment-section {
-            width: 100%;
-            border-top: 1px dashed #666;
-            padding-top: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-
-        .fps-qr-box {
-            border: 1px solid #000;
-            padding: 4px;
             text-align: center;
-            width: 85px;
-            font-size: 7.5pt;
+
+            margin: 20px 0 25px 0;
+
         }
-        .fps-qr-box img {
-            width: 75px;
-            height: 75px;
-            display: block;
-            margin: 0 auto;
+
+        .doc-title h1 {
+
+            margin: 0;
+
+            font-size: 17pt;
+
+            letter-spacing: 4px;
+
+            font-weight: bold;
+
         }
+
+        .doc-title h2 {
+
+            margin: 5px 0 0 0;
+
+            font-size: 11pt;
+
+            font-family: "Times New Roman", serif;
+
+            letter-spacing: 0.5px;
+
+            font-weight: bold;
+
+        }
+
+
+
+        .content-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-bottom: 20px;
+
+        }
+
+        .content-zh {
+
+            width: 50%;
+
+            vertical-align: top;
+
+            padding-right: 15px;
+
+            text-align: justify;
+
+            font-size: 10pt;
+
+            line-height: 1.8;
+
+        }
+
+        .content-en {
+
+            width: 50%;
+
+            vertical-align: top;
+
+            padding-left: 10px;
+
+            text-align: justify;
+
+            font-family: "Times New Roman", serif;
+
+            font-size: 9.5pt;
+
+            line-height: 1.45;
+
+        }
+
+
+
+        .payment-details-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin: 15px 0;
+
+            border: 1px solid #000;
+
+        }
+
+        .payment-details-table th {
+
+            border: 1px solid #000;
+
+            background-color: #f2f2f2;
+
+            padding: 6px;
+
+            font-size: 9pt;
+
+            text-align: center;
+
+        }
+
+        .payment-details-table td {
+
+            border: 1px solid #000;
+
+            padding: 6px;
+
+            font-size: 9.5pt;
+
+            text-align: center;
+
+            font-family: "Courier New", monospace;
+
+        }
+
+
+
+        .signature-section {
+
+            width: 100%;
+
+            margin-top: 30px;
+
+            border-collapse: collapse;
+
+        }
+
+        .sig-box-left {
+
+            width: 55%;
+
+            vertical-align: bottom;
+
+            font-size: 9.5pt;
+
+            line-height: 1.5;
+
+        }
+
+        .sig-box-right {
+
+            width: 45%;
+
+            vertical-align: bottom;
+
+            text-align: center;
+
+        }
+
+
+
+        .paid-stamp {
+
+            width: 140px;
+
+            height: 68px;
+
+            border: 3px double #cc0000;
+
+            color: #cc0000;
+
+            display: inline-block;
+
+            text-align: center;
+
+            font-family: Arial, sans-serif;
+
+            font-weight: bold;
+
+            padding-top: 4px;
+
+            transform: rotate(-4deg);
+
+            opacity: 0.9;
+
+            background-color: rgba(204, 0, 0, 0.02);
+
+        }
+
+
+
+        .footer-note {
+
+            margin-top: 25px;
+
+            border-top: 1px dashed #aaa;
+
+            padding-top: 8px;
+
+            font-size: 8pt;
+
+            color: #444;
+
+            font-family: Arial, sans-serif;
+
+            line-height: 1.3;
+
+        }
+
+
 
         .custom-toast {
+
             position: fixed;
+
             top: -80px;
+
             left: 50%;
+
             transform: translateX(-50%);
+
             background: #dc2626;
+
             color: #fff;
-            padding: 12px 28px;
+
+            padding: 10px 24px;
+
             border-radius: 20px;
-            font-size: 14px;
+
+            font-size: 13px;
+
             font-weight: bold;
+
             z-index: 999999;
+
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
             font-family: sans-serif;
+
         }
-        .custom-toast.show { top: 75px; }
-        .custom-toast.success { background: #16a34a; }
+
+        .custom-toast.show { top: 80px; }
+
+        .custom-toast.success { background: #005a36; }
+
         .custom-toast.error { background: #dc2626; }
+
     </style>
+
 </head>
+
 <body>
 
+
+
 <div class="control-panel" id="action-control-panel">
-    <div class="form-group" style="width: 100px;">
-        <input type="text" id="input-name-zh" value="" placeholder="中文名">
+
+    <div class="form-group">
+
+        <input type="text" id="input-name-zh" value="" placeholder="纳税人中文名">
+
     </div>
 
-    <div class="form-group" style="width: 100px;">
-       <input type="text" id="input-name-en" value="" placeholder="英文名">
+
+
+    <div class="form-group">
+
+       <input type="text" id="input-name-en" value="" placeholder="纳税人英文名">
+
     </div>
 
-    <div class="form-group" style="width: 100px;">
-        <input type="number" id="input-amount-cny" value="" step="0.01" placeholder="RMB金额">
+
+
+    <div class="form-group">
+
+        <input type="number" id="input-amount-cny" value="" step="0.01" placeholder="人民币金额">
+
     </div>
 
-    <button class="action-btn" id="btn-copy" onclick="copyReceiptAsImage()">生成并复制图片</button>
+
+
+    <button class="copy-btn" id="btn-copy" onclick="copyReceiptAsImage()">生成并复制图片</button>
+
 </div>
+
+
 
 <div class="receipt-container" id="receipt-capture-area">
+
     <div class="receipt-inner">
+
         <div>
-            <!-- Header -->
+
             <table class="header-table">
+
                 <tr>
+
                     <td class="header-left">
+
                         <div class="ird-logo-container">
+
                             <img class="ird-logo-img" src="Inland_Revenue_Department_logo.png" crossorigin="anonymous" alt="IRD Logo">
+
                             <div>
-                                稅務局 印花稅署<br>
-                                香港灣仔告士打道5號 稅務大樓3樓<br>
-                                電話號碼 Tel. No.: 2594 3202<br>
-                                傳真號碼 Fax No.: 2519 9025
+
+                                <div class="header-title-zh">稅 務 局</div>
+
+                                <div class="header-title-en">INLAND REVENUE DEPARTMENT</div>
+
                             </div>
+
                         </div>
+
                     </td>
+
                     <td class="header-right">
-                        INLAND REVENUE DEPARTMENT<br>
-                        STAMP OFFICE<br>
-                        3/F, Revenue Tower, 5 Gloucester Road,<br>
-                        Wan Chai, Hong Kong.<br>
+
+                        香港灣仔告士打道5號稅務大樓<br>
+
+                        Revenue Tower, 5 Gloucester Road, Wan Chai, Hong Kong<br>
+
                         網址 Web site: www.ird.gov.hk<br>
-                        電郵 E-mail: taxsdo@ird.gov.hk
+
+                        表格 Form No.: IR1273 (Confirmation)
+
                     </td>
+
                 </tr>
+
             </table>
 
-            <div class="title-block">
-                <div class="line-1">印花稅 STAMP DUTY</div>
-                <div class="line-2">繳付印花稅通知書 STAMP DUTY PAYMENT NOTICE</div>
-            </div>
 
-            <table class="meta-top-table">
+
+            <table class="meta-table">
+
                 <tr>
+
                     <td style="width: 50%;">
-                        發出日期<br>
-                        Date of Issue:
-                        <span style="margin-left: 15px;" class="mono-val" id="display-date-issue" contenteditable="true">29/08/2026</span>
-                        <span style="font-size: 7.5pt; color: #555; margin-left: 5px;">(日 Day / 月 Month / 年 Year)</span>
+
+                        <span class="meta-label-red">檔案號碼 / File No. (TIN):</span><br>
+
+                        <span class="meta-value" id="display-file-no" contenteditable="true"></span>
+
                     </td>
-                    <td style="width: 50%; text-align: right;">
-                        <table style="float: right; border-collapse: collapse;">
-                            <tr>
-                                <td style="text-align: right; padding-right: 10px; font-size: 9pt;">
-                                    稅單號碼 Charge Number:<br>
-                                    <span style="font-size: 8pt; color: #333;">電子付款專用的收款帳號<br><strong>Shroff Account Number</strong><br>for electronic payments:</span>
-                                </td>
-                                <td>
-                                    <div style="font-size: 10.5pt; font-weight: bold; margin-bottom: 4px;" class="mono-val" id="display-charge-no" contenteditable="true">3-21-1-0853344-8</div>
-                                    <div class="shroff-box" id="display-shroff-no" contenteditable="true">321108533448</div>
-                                </td>
-                            </tr>
-                        </table>
+
+                    <td style="width: 50%;">
+
+                        <span class="meta-label-red">簽發日期 / Date of Issue:</span><br>
+
+                        <span class="meta-value" id="display-date-top" contenteditable="true"></span>
+
                     </td>
+
                 </tr>
+
+                <tr>
+
+                    <td>
+
+                        <span class="meta-label-red">納稅人姓名 / Name of Taxpayer:</span><br>
+
+                        <span class="meta-value" id="display-taxpayer-name"></span>
+
+                    </td>
+
+                    <td>
+
+                        <span class="meta-label-red">課稅年度 / Year of Assessment:</span><br>
+
+                        <span class="meta-value" id="display-tax-year" contenteditable="true"></span>
+
+                    </td>
+
+                </tr>
+
             </table>
 
-            <table class="main-details-table">
+
+
+            <div class="doc-title">
+
+                <h1>繳 稅 證 明 書</h1>
+
+                <h2>LETTER OF CONFIRMATION OF TAX PAYMENT</h2>
+
+            </div>
+
+
+
+            <table class="content-table">
+
                 <tr>
-                    <td style="width: 35%;">文書編號 Instrument Ref. No.:</td>
-                    <td style="width: 65%;" class="mono-val" id="display-instrument-ref" contenteditable="true">3-21-101738-0-0-0</td>
-                </tr>
-                <tr>
-                    <td>申請加蓋印花日期 Stamping Request Date:</td>
-                    <td>
-                        <span class="mono-val" id="display-date-request" contenteditable="true">29/08/2026</span>
-                        <span style="font-size: 7.5pt; color: #555; margin-left: 10px;">(日 Day / 月 Month / 年 Year)</span>
+
+                    <td class="content-zh">
+
+                        茲證明上述納稅人已向本局全數繳清下列課稅年度評稅通知書內所列的應繳稅款。特此證明。<br><br>
+
+                        本證明書乃根據本局電腦紀錄發出，用以確認納稅人履行《印花稅條例》（香港法例第117章）下的相關繳稅責任。
+
                     </td>
-                </tr>
-                <tr>
-                    <td>
-                        納稅人 Taxpayer Name:<br>
-                        地址 Address:
+
+                    <td class="content-en">
+
+                        THIS IS TO CONFIRM that the abovenamed taxpayer has fully paid and settled all the tax specified in the Notice(s) of Assessment for the relevant Year of Assessment as detailed below.<br><br>
+
+                        This letter of confirmation is issued based on the records of this Department as evidence of settlement of tax liabilities under the Stamp Duty Ordinance (Cap. 117).
+
                     </td>
-                    <td>
-                        <div id="display-taxpayer-name" contenteditable="true" style="font-weight: bold; min-height: 1.2em;"></div>
-                        <div id="display-property-address" contenteditable="true" style="margin-top: 3px;">Service Revenue Agreement / Commercial Transaction & Settlement (Hong Kong Financial Services)</div>
-                    </td>
+
                 </tr>
-                <tr>
-                    <td>文件數目 No. of Document(s):</td>
-                    <td>
-                        <div style="display: flex; justify-content: space-between; width: 220px;">
-                            <span>文書正本 Original Instrument</span>
-                            <span class="mono-val">1</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; width: 220px;">
-                            <span>複本 Duplicate</span>
-                            <span class="mono-val">0</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>應繳印花稅 Stamp Duty Payable:</td>
-                    <td>
-                        <div style="display: flex; justify-content: space-between; width: 100%;">
-                            <span>文書正本 Original Instrument</span>
-                            <span class="mono-val" id="display-amount-stamp-original">$ 100.00</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; width: 100%;">
-                            <span>複本 Duplicate</span>
-                            <span class="mono-val">$ 0.00</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>商業/服務合約應繳徵款<br>Levy Payable Under Commercial & Revenue Agreements:</td>
-                    <td>
-                        <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-end; height: 100%;">
-                            <span>$</span>
-                            <span class="mono-val">0.00</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>應繳付總額 Total Amount Payable:</strong></td>
-                    <td>
-                        <div style="display: flex; justify-content: space-between; width: 100%; font-weight: bold; font-size: 10pt;">
-                            <span>$</span>
-                            <span class="mono-val" id="display-total-amount">100.00</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>繳稅日期 DUE DATE FOR PAYMENT:</strong></td>
-                    <td>
-                        <span class="mono-val" style="font-size: 10.5pt; font-weight: bold;" id="display-date-due" contenteditable="true">28/09/2026</span>
-                        <span style="font-size: 7.5pt; color: #555; margin-left: 10px;">(日 Day / 月 Month / 年 Year)</span>
-                    </td>
-                </tr>
+
             </table>
 
-            <div class="collector-signature">
-                印花稅署署長 譚大鵬<br>
-                <strong>TAM Tai-pang</strong><br>
-                Collector of Stamp Revenue
-            </div>
 
-            <div class="instructions-block">
-                <strong>有關繳款辦法詳情，請瀏覽本局網頁 For details of payment instructions, please visit our web site:</strong><br>
-                &lt; www.ird.gov.hk &gt;<br>
-                注意事项 Note:<br>
-                有關付款首先會被用作繳付印花稅，直至印花稅繳清，才繳付徵款。<br>
-                Stamp duty is accorded priority to receive payment, and only until stamp duty liability has been settled, then towards the levy.<br>
-                如以支票付款，支票須在首次提交予付款銀行獲得兌現，否則根據此繳款而發出的印花證明書及徵款繳費將無效。<br>
-                For cheque payment, the cheque should be honoured on the first presentation to the drawee bank. Otherwise, the stamp certificate issued and payment of levy in respect of this cheque payment will become invalid.
-            </div>
+
+            <table class="payment-details-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>稅項類別<br>Tax Type</th>
+
+                        <th>收款帳號/收條號碼<br>Shroff Account / Receipt No.</th>
+
+                        <th>繳款日期<br>Date of Payment</th>
+
+                        <th>已繳金額 (港幣/折合人民幣)<br>Amount Paid (HKD / RMB)</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td style="font-family: serif; font-size: 9pt;">印花稅 / Stamp Duty</td>
+
+                        <td id="display-shroff-no" contenteditable="true"></td>
+
+                        <td id="display-pay-date" contenteditable="true"></td>
+
+                        <td style="font-weight: bold; font-size: 8.5pt;" id="display-paid-amount">HK$0.00 (折合RMB 0.00)</td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
         </div>
+
+
 
         <div>
-            <div style="font-size: 8pt; margin-bottom: 5px;">
-                I.R.C.表格第 3512 號<br>
-                IRC 3512
+
+            <table class="signature-section">
+
+                <tr>
+
+                    <td class="sig-box-left">
+
+                        稅務局局長<br>
+
+                        (署理 / 代行)<br>
+
+                        for Commissioner of Inland Revenue<br>
+
+                        香港特別行政區政府 HKSAR
+
+                    </td>
+
+                    <td class="sig-box-right">
+
+                        <div class="paid-stamp">
+
+                            <div style="font-size: 15pt; letter-spacing: 2px;">PAID</div>
+
+                            <div style="font-size: 7.5pt; margin-top: -2px;">INLAND REVENUE DEPT</div>
+
+                            <div style="font-size: 8.5pt;" id="display-stamp-date"></div>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+
+            <div class="footer-note">
+
+                <strong>重要備註 / Important Note:</strong><br>
+
+                1. 本文件乃由稅務局系統自動發出之官方證明書。任何未經授權之塗改或偽造均屬違法。<br>
+
+                2. 如欲核實本證明書真偽，請致電本局熱線 (852) 187 8088 或電郵至 taxctr1@ird.gov.hk。<br>
+
+                1. This is an official Confirmation generated by the Inland Revenue Department's system.<br>
+
+                2. For verification of this confirmation, please contact IRD hotline at (852) 187 8088.
+
             </div>
 
-            <div class="footer-payment-section">
-                <div>
-                    <div style="font-size: 8pt; margin-bottom: 4px;">機印所示金額收訖 RECEIVED the sum imprinted as shown</div>
-                    <svg id="barcode-element"></svg>
-                    <div style="font-size: 8pt; font-family: 'Courier New', monospace; margin-top: 2px;" id="display-barcode-text" contenteditable="true">8305020600000000100001532110853344830</div>
-                </div>
-
-                <div style="text-align: center;">
-                    <div style="font-size: 10pt; font-weight: bold; font-family: 'Courier New', monospace;" id="display-bottom-amount" contenteditable="true">$100.00</div>
-                    <div style="font-size: 8.5pt; margin-top: 15px;">
-                        稅單號碼 Charge No.<br>
-                        <span class="mono-val" id="display-bottom-chargeno" contenteditable="true">3-21-1-0853344-8</span>
-                    </div>
-                </div>
-
-                <div style="text-align: right;">
-                    <div style="font-size: 8pt; margin-bottom: 2px;">
-                        繳稅日期 Due Date<br>
-                        <span class="mono-val" id="display-bottom-duedate" contenteditable="true">28/09/2026</span>
-                    </div>
-                    <div class="fps-qr-box">
-                        <div style="font-size: 7pt; font-weight: bold;">"FPS" Payment</div>
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=321108533448" crossorigin="anonymous" alt="FPS QR">
-                        <div style="font-size: 7pt;">「轉數快」繳費</div>
-                    </div>
-                    <div style="border: 1px solid #000; padding: 2px 4px; font-size: 8pt; font-family: monospace; display: inline-block; margin-top: 2px;" contenteditable="true">
-                        CRC 20615
-                    </div>
-                </div>
-            </div>
         </div>
+
     </div>
+
 </div>
+
+
 
 <div id="customToast" class="custom-toast"></div>
 
+
+
 <script>
+
+    const monthNamesEnShort = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+
     const EXCHANGE_RATE_HKD_TO_CNY = 0.92;
 
-    function generateRandomNumbers() {
-        const rand7 = Math.floor(1000000 + Math.random() * 9000000);
-        const rand6 = Math.floor(100000 + Math.random() * 900000);
 
-        const chargeNo = `3-21-1-0${rand7.toString().padStart(6, '0')}-8`;
-        const shroffNo = `32110${rand7.toString().padStart(6, '0')}8`;
-        const instrumentRef = `3-21-${rand6}-0-0-0`;
-        const barcodeVal = `83050206000000001000015${shroffNo}30`;
 
-        document.getElementById('display-charge-no').innerText = chargeNo;
-        document.getElementById('display-shroff-no').innerText = shroffNo;
-        document.getElementById('display-bottom-chargeno').innerText = chargeNo;
-        document.getElementById('display-instrument-ref').innerText = instrumentRef;
-        document.getElementById('display-barcode-text').innerText = barcodeVal;
+    function generateRandomFileNo(dateObj) {
 
-        try {
-            JsBarcode("#barcode-element", barcodeVal, {
-                format: "CODE128",
-                width: 1.1,
-                height: 35,
-                displayValue: false,
-                margin: 0
-            });
-        } catch(e) { console.log(e); }
+        const y = dateObj.getFullYear();
+
+        const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+
+        const d = String(dateObj.getDate()).padStart(2, '0');
+
+        const rand4 = Math.floor(1000 + Math.random() * 9000);
+
+        return `91/${y}${m}${d}-${rand4}`;
+
     }
+
+
+
+    function generateRandomShroffNo() {
+
+        const rand1 = Math.floor(1 + Math.random() * 9);
+
+        const rand7 = Math.floor(1000000 + Math.random() * 9000000);
+
+        const rand1Check = Math.floor(Math.random() * 10);
+
+        return `${rand1}-${rand7}-${rand1Check}`;
+
+    }
+
+
 
     function calculateAndSync() {
+
         const rawZhName = document.getElementById('input-name-zh').value.trim();
+
         const rawEnName = document.getElementById('input-name-en').value.trim();
+
         const cnyInputVal = document.getElementById('input-amount-cny').value.trim();
 
-        if (rawZhName || rawEnName) {
-            const zhNameDisplay = rawZhName ? ` (${rawZhName})` : "";
-            const enNameDisplay = rawEnName ? rawEnName.toUpperCase() : "";
-            document.getElementById('display-taxpayer-name').innerText = `${enNameDisplay}${zhNameDisplay}`;
-        } else {
-            document.getElementById('display-taxpayer-name').innerText = "";
+
+
+        let nameStr = "";
+
+        if (rawEnName && rawZhName) {
+
+            nameStr = `${rawEnName.toUpperCase()} (${rawZhName})`;
+
+        } else if (rawEnName) {
+
+            nameStr = rawEnName.toUpperCase();
+
+        } else if (rawZhName) {
+
+            nameStr = rawZhName;
+
         }
+
+        document.getElementById('display-taxpayer-name').innerText = nameStr;
+
+
 
         if (cnyInputVal !== "") {
+
             const cnyAmount = parseFloat(cnyInputVal) || 0;
+
             const hkdAmount = cnyAmount / EXCHANGE_RATE_HKD_TO_CNY;
 
+            
+
             const hkdFormatted = hkdAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
             const cnyFormatted = cnyAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-            const dualCurrencyText = `$ ${hkdFormatted} (折合RMB${cnyFormatted})`;
             
-            document.getElementById('display-amount-stamp-original').innerText = dualCurrencyText;
-            document.getElementById('display-total-amount').innerText = `${hkdFormatted}(折合RMB${cnyFormatted})`;
-            document.getElementById('display-bottom-amount').innerText = `$${hkdFormatted}`;
+
+            document.getElementById('display-paid-amount').innerText = `HK$ ${hkdFormatted} (折合RMB ${cnyFormatted})`;
+
         } else {
-            document.getElementById('display-amount-stamp-original').innerText = "$0.00";
-            document.getElementById('display-total-amount').innerText = "0.00";
-            document.getElementById('display-bottom-amount').innerText = "$0.00";
+
+            document.getElementById('display-paid-amount').innerText = `HK$ 0.00 (折合RMB 0.00)`;
+
         }
+
     }
 
-    function validateInputs() {
+
+
+    function triggerWarning(msg) {
+
+        const panel = document.getElementById('action-control-panel');
+
+        panel.classList.remove('shake');
+
+        void panel.offsetWidth; 
+
+        panel.classList.add('shake');
+
+        showToast(msg, 'error');
+
+    }
+
+
+
+    function copyReceiptAsImage() {
+
         const zhName = document.getElementById('input-name-zh').value.trim();
+
         const enName = document.getElementById('input-name-en').value.trim();
+
         const amountCny = document.getElementById('input-amount-cny').value.trim();
 
-        if (!zhName || !enName || !amountCny) {
-            const panel = document.getElementById('action-control-panel');
-            panel.classList.remove('shake');
-            void panel.offsetWidth; 
-            panel.classList.add('shake');
-            showToast("请完整填写中文名、英文名与人民币金额！", 'error');
-            return false;
-        }
-        return true;
-    }
 
-    async function copyReceiptAsImage() {
-        if (!validateInputs()) return;
+
+        if (!zhName || !enName || !amountCny) {
+
+            triggerWarning("请完整填写（姓名与人民币金额）后再生成！");
+
+            return;
+
+        }
+
+
 
         const targetElement = document.getElementById('receipt-capture-area');
+
         const copyBtn = document.getElementById('btn-copy');
 
-        copyBtn.innerText = "处理中...";
-        copyBtn.disabled = true;
+        
 
-        try {
-            const canvas = await html2canvas(targetElement, {
-                scale: 3, 
-                dpi: 300,
-                allowTaint: false,
-                useCORS: true,
-                backgroundColor: "#ffffff"
-            });
+        html2canvas(targetElement, {
 
-            canvas.toBlob(async (blob) => {
-                if (!blob) throw new Error("图片生成失败");
+            scale: 3, 
 
-                if (navigator.clipboard && window.ClipboardItem) {
-                    try {
-                        const item = new ClipboardItem({ [blob.type]: blob });
-                        await navigator.clipboard.write([item]);
-                        
+            dpi: 300,
+
+            useCORS: true,
+
+            backgroundColor: "#ffffff"
+
+        }).then(canvas => {
+
+            canvas.toBlob(blob => {
+
+                if (navigator.clipboard && navigator.clipboard.write) {
+
+                    const item = new ClipboardItem({ "image/png": blob });
+
+                    navigator.clipboard.write([item]).then(() => {
+
                         copyBtn.classList.add('copied');
-                        copyBtn.innerText = "已复制成功！";
-                        showToast("已成功复制图片到剪贴板！", "success");
+
+                        copyBtn.innerText = "已复制至剪贴板";
+
+                        showToast("已复制至剪贴板", "success");
+
+                        
 
                         setTimeout(() => {
+
                             copyBtn.classList.remove('copied');
+
                             copyBtn.innerText = "生成并复制图片";
-                            copyBtn.disabled = false;
+
                         }, 3000);
-                    } catch (err) {
-                        console.error(err);
-                        showToast("复制失败，请确认页面已通过 HTTP/HTTPS 环境打开且已授予剪贴板权限", "error");
-                        copyBtn.innerText = "生成并复制图片";
-                        copyBtn.disabled = false;
-                    }
+
+                        
+
+                    }).catch(err => {
+
+                        console.error("写入剪贴板失败: ", err);
+
+                        showToast("剪贴板写入失败，请重试", "error");
+
+                    });
+
                 } else {
-                    showToast("当前浏览器环境不支持图片写入剪贴板", "error");
-                    copyBtn.innerText = "生成并复制图片";
-                    copyBtn.disabled = false;
+
+                    showToast("当前浏览器不支持直接复制图片，请使用 Chrome 或 Edge", "error");
+
                 }
+
             }, "image/png");
 
-        } catch (err) {
-            console.error(err);
-            showToast("渲染失败，请检查资源路径或 CORS 跨域设置", "error");
-            copyBtn.innerText = "生成并复制图片";
-            copyBtn.disabled = false;
-        }
+        });
+
     }
+
+
 
     function showToast(msg, type = 'error') {
+
         const toast = document.getElementById('customToast');
+
         toast.innerText = msg;
+
         toast.className = 'custom-toast';
+
         toast.classList.add(type);
+
         toast.classList.add('show');
+
         clearTimeout(window.toastTimer);
-        window.toastTimer = setTimeout(() => { toast.classList.remove('show'); }, 4000);
+
+        window.toastTimer = setTimeout(() => { toast.classList.remove('show'); }, 3000);
+
     }
 
-    function initDates() {
+
+
+    function initAutoDateAndFileNo() {
+
         const today = new Date();
+
         const y = today.getFullYear();
+
         const m = String(today.getMonth() + 1).padStart(2, '0');
+
         const d = String(today.getDate()).padStart(2, '0');
 
-        const issueDateStr = `${d}/${m}/${y}`;
-        
-        const dueDateObj = new Date(today);
-        dueDateObj.setDate(dueDateObj.getDate() + 30);
-        const dueY = dueDateObj.getFullYear();
-        const dueM = String(dueDateObj.getMonth() + 1).padStart(2, '0');
-        const dueD = String(dueDateObj.getDate()).padStart(2, '0');
-        const dueDateStr = `${dueD}/${dueM}/${dueY}`;
 
-        document.getElementById('display-date-issue').innerText = issueDateStr;
-        document.getElementById('display-date-request').innerText = issueDateStr;
-        document.getElementById('display-date-due').innerText = dueDateStr;
-        document.getElementById('display-bottom-duedate').innerText = dueDateStr;
+
+        const fullDateStr = `${d}/${m}/${y}`;
+
+        
+
+        document.getElementById('display-date-top').innerText = fullDateStr;
+
+        document.getElementById('display-pay-date').innerText = fullDateStr;
+
+        
+
+        const mIndex = today.getMonth();
+
+        document.getElementById('display-stamp-date').innerText = `${d} ${monthNamesEnShort[mIndex]} ${y}`;
+
+        
+
+        document.getElementById('display-tax-year').innerText = `${y - 1}/${String(y).slice(-2)}`;
+
+
+
+        document.getElementById('display-file-no').innerText = generateRandomFileNo(today);
+
+        document.getElementById('display-shroff-no').innerText = generateRandomShroffNo();
+
     }
 
+
+
     document.querySelectorAll('.control-panel input').forEach(element => {
+
         element.addEventListener('input', calculateAndSync);
+
     });
 
+
+
     window.onload = function() {
-        initDates();
-        generateRandomNumbers();
+
+        initAutoDateAndFileNo();
+
         calculateAndSync();
+
     };
+
 </script>
 
+
+
 </body>
+
 </html>
