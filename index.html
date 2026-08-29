@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <title>印花税</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+</head>
+<body>
+
+<div class="control-panel" id="action-control-panel">
+    <div class="form-group" style="width: 100px;">
+        <input type="text" id="input-name-zh" value="" placeholder="中文名">
+    </div>
+
+    <div class="form-group" style="width: 100px;">
+       <input type="text" id="input-name-en" value="" placeholder="英文名">
+    </div>
+
+    <div class="form-group" style="width: 100px;">
+        <input type="number" id="input-amount-cny" value="" step="0.01" placeholder="RMB金额">
+    </div>
+
+    <button class="action-btn" id="btn-copy" onclick="copyReceiptAsImage()">生成并复制图片</button>
+</div>
+
+<div class="receipt-container" id="receipt-capture-area">
+    <div class="receipt-inner">
+        <div>
+            <!-- Header -->
+            <table class="header-table">
+                <tr>
+                    <td class="header-left">
+                        <div class="ird-logo-container">
+                            <img class="ird-logo-img" src="Inland_Revenue_Department_logo.png" crossorigin="anonymous" alt="IRD Logo">
+                            <div>
+                                稅務局 印花稅署<br>
+                                香港灣仔告士打道5號 稅務大樓3樓<br>
+                                電話號碼 Tel. No.: 2594 3202<br>
+                                傳真號碼 Fax No.: 2519 9025
+                            </div>
+                        </div>
+                    </td>
+                    <td class="header-right">
+                        INLAND REVENUE DEPARTMENT<br>
+                        STAMP OFFICE<br>
+                        3/F, Revenue Tower, 5 Gloucester Road,<br>
+                        Wan Chai, Hong Kong.<br>
+                        網址 Web site: www.ird.gov.hk<br>
+                        電郵 E-mail: taxsdo@ird.gov.hk
+                    </td>
+                </tr>
+            </table>
+
+            <div class="title-block">
+                <div class="line-1">印花稅 STAMP DUTY</div>
+                <div class="line-2">繳付印花稅通知書 STAMP DUTY PAYMENT NOTICE</div>
+            </div>
+
+            <table class="meta-top-table">
+                <tr>
+                    <td style="width: 50%;">
+                        發出日期<br>
+                        Date of Issue:
+                        <span style="margin-left: 15px;" class="mono-val" id="display-date-issue" contenteditable="true">29/08/2026</span>
+                        <span style="font-size: 7.5pt; color: #555; margin-left: 5px;">(日 Day / 月 Month / 年 Year)</span>
+                    </td>
+                    <td style="width: 50%; text-align: right;">
+                        <table style="float: right; border-collapse: collapse;">
+                            <tr>
+                                <td style="text-align: right; padding-right: 10px; font-size: 9pt;">
+                                    稅單號碼 Charge Number:<br>
+                                    <span style="font-size: 8pt; color: #333;">電子付款專用的收款帳號<br><strong>Shroff Account Number</strong><br>for electronic payments:</span>
+                                </td>
+                                <td>
+                                    <div style="font-size: 10.5pt; font-weight: bold; margin-bottom: 4px;" class="mono-val" id="display-charge-no" contenteditable="true">3-21-1-0853344-8</div>
+                                    <div class="shroff-box" id="display-shroff-no" contenteditable="true">321108533448</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="main-details-table">
+                <tr>
+                    <td style="width: 35%;">文書編號 Instrument Ref. No.:</td>
+                    <td style="width: 65%;" class="mono-val" id="display-instrument-ref" contenteditable="true">3-21-101738-0-0-0</td>
+                </tr>
+                <tr>
+                    <td>申請加蓋印花日期 Stamping Request Date:</td>
+                    <td>
+                        <span class="mono-val" id="display-date-request" contenteditable="true">29/08/2026</span>
+                        <span style="font-size: 7.5pt; color: #555; margin-left: 10px;">(日 Day / 月 Month / 年 Year)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        納稅人 Taxpayer Name:<br>
+                        地址 Address:
+                    </td>
+                    <td>
+                        <div id="display-taxpayer-name" contenteditable="true" style="font-weight: bold; min-height: 1.2em;"></div>
+                        <div id="display-property-address" contenteditable="true" style="margin-top: 3px;">Service Revenue Agreement / Commercial Transaction & Settlement (Hong Kong Financial Services)</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>文件數目 No. of Document(s):</td>
+                    <td>
+                        <div style="display: flex; justify-content: space-between; width: 220px;">
+                            <span>文書正本 Original Instrument</span>
+                            <span class="mono-val">1</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; width: 220px;">
+                            <span>複本 Duplicate</span>
+                            <span class="mono-val">0</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>應繳印花稅 Stamp Duty Payable:</td>
+                    <td>
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
+                            <span>文書正本 Original Instrument</span>
+                            <span class="mono-val" id="display-amount-stamp-original">$ 100.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
+                            <span>複本 Duplicate</span>
+                            <span class="mono-val">$ 0.00</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>商業/服務合約應繳徵款<br>Levy Payable Under Commercial & Revenue Agreements:</td>
+                    <td>
+                        <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-end; height: 100%;">
+                            <span>$</span>
+                            <span class="mono-val">0.00</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>應繳付總額 Total Amount Payable:</strong></td>
+                    <td>
+                        <div style="display: flex; justify-content: space-between; width: 100%; font-weight: bold; font-size: 10pt;">
+                            <span>$</span>
+                            <span class="mono-val" id="display-total-amount">100.00</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>繳稅日期 DUE DATE FOR PAYMENT:</strong></td>
+                    <td>
+                        <span class="mono-val" style="font-size: 10.5pt; font-weight: bold;" id="display-date-due" contenteditable="true">28/09/2026</span>
+                        <span style="font-size: 7.5pt; color: #555; margin-left: 10px;">(日 Day / 月 Month / 年 Year)</span>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="collector-signature">
+                印花稅署署長 譚大鵬<br>
+                <strong>TAM Tai-pang</strong><br>
+                Collector of Stamp Revenue
+            </div>
+
+            <div class="instructions-block">
+                <strong>有關繳款辦法詳情，請瀏覽本局網頁 For details of payment instructions, please visit our web site:</strong><br>
+                &lt; www.ird.gov.hk &gt;<br>
+                注意事项 Note:<br>
+                有關付款首先會被用作繳付印花稅，直至印花稅繳清，才繳付徵款。<br>
+                Stamp duty is accorded priority to receive payment, and only until stamp duty liability has been settled, then towards the levy.<br>
+                如以支票付款，支票須在首次提交予付款銀行獲得兌現，否則根據此繳款而發出的印花證明書及徵款繳費將無效。<br>
+                For cheque payment, the cheque should be honoured on the first presentation to the drawee bank. Otherwise, the stamp certificate issued and payment of levy in respect of this cheque payment will become invalid.
+            </div>
+        </div>
+
+        <div>
+            <div style="font-size: 8pt; margin-bottom: 5px;">
+                I.R.C.表格第 3512 號<br>
+                IRC 3512
+            </div>
+
+            <div class="footer-payment-section">
+                <div>
+                    <div style="font-size: 8pt; margin-bottom: 4px;">機印所示金額收訖 RECEIVED the sum imprinted as shown</div>
+                    <svg id="barcode-element"></svg>
+                    <div style="font-size: 8pt; font-family: 'Courier New', monospace; margin-top: 2px;" id="display-barcode-text" contenteditable="true">8305020600000000100001532110853344830</div>
+                </div>
+
+                <div style="text-align: center;">
+                    <div style="font-size: 10pt; font-weight: bold; font-family: 'Courier New', monospace;" id="display-bottom-amount" contenteditable="true">$100.00</div>
+                    <div style="font-size: 8.5pt; margin-top: 15px;">
+                        稅單號碼 Charge No.<br>
+                        <span class="mono-val" id="display-bottom-chargeno" contenteditable="true">3-21-1-0853344-8</span>
+                    </div>
+                </div>
+
+                <div style="text-align: right;">
+                    <div style="font-size: 8pt; margin-bottom: 2px;">
+                        繳稅日期 Due Date<br>
+                        <span class="mono-val" id="display-bottom-duedate" contenteditable="true">28/09/2026</span>
+                    </div>
+                    <div class="fps-qr-box">
+                        <div style="font-size: 7pt; font-weight: bold;">"FPS" Payment</div>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=321108533448" crossorigin="anonymous" alt="FPS QR">
+                        <div style="font-size: 7pt;">「轉數快」繳費</div>
+                    </div>
+                    <div style="border: 1px solid #000; padding: 2px 4px; font-size: 8pt; font-family: monospace; display: inline-block; margin-top: 2px;" contenteditable="true">
+                        CRC 20615
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="customToast" class="custom-toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
