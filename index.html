@@ -297,7 +297,7 @@
         <input type="number" id="input-amount-cny" value="" step="0.01" placeholder="金额">
     </div>
 
-    <button class="action-btn" id="btn-copy" onclick="copyReceiptAsImage()">生成并复制图片</button>
+    <button class="action-btn" id="btn-copy" onclick="copyReceiptAsImage()">复制图片</button>
 </div>
 
 <div class="receipt-container" id="receipt-capture-area">
@@ -601,8 +601,8 @@
                         await navigator.clipboard.write([item]);
                         
                         copyBtn.classList.add('copied');
-                        copyBtn.innerText = "已复制成功！";
-                        showToast("已成功复制图片到剪贴板！", "success");
+                        copyBtn.innerText = "复制成功！";
+                        showToast("成功复制图片到剪贴板！", "success");
 
                         setTimeout(() => {
                             copyBtn.classList.remove('copied');
