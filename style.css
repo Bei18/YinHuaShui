@@ -1,0 +1,291 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 100px 0 30px;
+    font-family: "MingLiU", "PMingLiU", "Times New Roman", serif;
+    color: #000;
+    background: linear-gradient(135deg, #eef2f3 0%, #8e9eab 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+[contenteditable="true"]:hover {
+    background-color: #f0fdf4;
+    outline: 1px dashed #005a36;
+}
+
+[contenteditable="true"]:focus {
+    background-color: #fff;
+    outline: 2px solid #005a36;
+}
+
+.control-panel {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    max-width: 95vw;
+    background: rgba(255, 255, 255, 0.95);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    padding: 10px 15px;
+    z-index: 9999;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(-50%); }
+    20%, 60% { transform: translateX(-52%); }
+    40%, 80% { transform: translateX(-48%); }
+}
+
+.control-panel.shake {
+    animation: shake 0.4s ease-in-out;
+    border-color: #dc2626;
+    background: rgba(254, 242, 242, 0.95);
+}
+
+.form-group {
+    flex: 0 0 auto;
+    width: 100px;
+}
+
+.form-group input {
+    width: 100%;
+    height: 34px;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 9.5pt;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #005a36;
+    box-shadow: 0 0 0 2px rgba(0, 90, 54, 0.2);
+}
+
+.action-btn {
+    height: 34px;
+    padding: 0 16px;
+    background-color: #005a36;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 9.5pt;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 90, 54, 0.3);
+    flex-shrink: 0;
+    font-family: sans-serif;
+}
+
+.action-btn:hover { 
+    background-color: #004026; 
+}
+
+.action-btn.copied { 
+    background-color: #16a34a !important; 
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(22, 163, 74, 0.6);
+}
+
+.receipt-container {
+    width: 210mm;
+    min-width: 210mm;
+    max-width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 12mm 15mm 10mm 15mm;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    margin: 0 auto;
+    overflow: hidden;
+    box-sizing: border-box;
+    font-size: 9.5pt;
+    line-height: 1.35;
+}
+
+.receipt-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.header-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 5px;
+}
+
+.header-left {
+    width: 50%;
+    vertical-align: top;
+    font-size: 8pt;
+}
+
+.header-right {
+    width: 50%;
+    vertical-align: top;
+    text-align: right;
+    font-size: 8pt;
+    font-family: "Times New Roman", serif;
+}
+
+.ird-logo-container {
+    display: flex;
+    align-items: flex-start;
+}
+
+.ird-logo-img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.title-block {
+    text-align: center;
+    margin: 10px 0 15px 0;
+}
+
+.title-block .line-1 {
+    font-size: 16pt;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.title-block .line-2 {
+    font-size: 14pt;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-top: 2px;
+}
+
+.meta-top-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+.meta-top-table td {
+    vertical-align: top;
+    font-size: 9.5pt;
+}
+
+.shroff-box {
+    border: 1px solid #000;
+    padding: 6px 12px;
+    text-align: center;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    font-size: 11pt;
+}
+
+.main-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #000;
+    margin-bottom: 12px;
+}
+
+.main-details-table td {
+    border: 1px solid #000;
+    padding: 5px 8px;
+    vertical-align: top;
+    font-size: 9pt;
+}
+
+.mono-val {
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+}
+
+.collector-signature {
+    text-align: right;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: 9.5pt;
+    line-height: 1.3;
+}
+
+.instructions-block {
+    font-size: 8pt;
+    line-height: 1.35;
+}
+
+.instructions-block strong {
+    font-size: 8.5pt;
+}
+
+.footer-payment-section {
+    width: 100%;
+    border-top: 1px dashed #666;
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.fps-qr-box {
+    border: 1px solid #000;
+    padding: 4px;
+    text-align: center;
+    width: 85px;
+    font-size: 7.5pt;
+}
+
+.fps-qr-box img {
+    width: 75px;
+    height: 75px;
+    display: block;
+    margin: 0 auto;
+}
+
+.custom-toast {
+    position: fixed;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #dc2626;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 999999;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    font-family: sans-serif;
+}
+
+.custom-toast.show { top: 75px; }
+.custom-toast.success { background: #16a34a; }
+.custom-toast.error { background: #dc2626; }
